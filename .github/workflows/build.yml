@@ -2,7 +2,7 @@ name: GraalVM Native Image builds
 on: [push, pull_request]
 jobs:
   build:
-    name: HelloWorld on ${{ matrix.os }}
+    name: 在 ${{ matrix.os }} 上构建
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -18,23 +18,26 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           native-image-job-reports: 'true'
 
-      - name: Show env
+      - name: 显示环境变量
         run: |
           echo "GRAALVM_HOME: $GRAALVM_HOME"
           echo "JAVA_HOME: $JAVA_HOME"
           java --version
           native-image --version
 
-      - name: Build with Maven
+      - name: 使用 Maven 构建
         run: |
-          mvn -Pnative package
-      - name: Upload binary
+          mvn -Pnative native:package
+#          mvn -Pnative native:compile
+#          mvn -Pnative package
+
+      - name: 上传
         uses: actions/upload-artifact@v2
         with:
           name: spring-boot-native-example-${{ matrix.os }}
           path: target/spring-boot-native-example*
 
-      - name: Upload binaries to release
+      - name: 上传到 release 中
         uses: svenstaro/upload-release-action@v2
         with:
            repo_token: ${{ secrets.GITHUB_TOKEN }}
