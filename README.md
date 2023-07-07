@@ -1,4 +1,4 @@
-# spring-boot-native
+# spring-boot-native-example
 
 - 需要 springboot3
 
