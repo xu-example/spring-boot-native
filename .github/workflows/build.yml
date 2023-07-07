@@ -1,0 +1,44 @@
+name: GraalVM Native Image builds
+on: [push, pull_request]
+jobs:
+  build:
+    name: HelloWorld on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '17.0.7'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          native-image-job-reports: 'true'
+
+      - name: Show env
+        run: |
+          echo "GRAALVM_HOME: $GRAALVM_HOME"
+          echo "JAVA_HOME: $JAVA_HOME"
+          java --version
+          native-image --version
+
+      - name: Build with Maven
+        run: |
+          mvn -Pnative package
+      - name: Upload binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: spring-boot-native-${{ matrix.os }}
+          path: spring-boot-native*
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file:  spring-boot-native*
+          tag: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          overwrite: true
+          file_glob: true
+          body: ""
