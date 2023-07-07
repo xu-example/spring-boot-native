@@ -1,5 +1,8 @@
 name: GraalVM Native Image builds
 on: [push, pull_request]
+permissions:
+  contents: write
+  packages: write
 jobs:
   build:
     name: 在 ${{ matrix.os }} 上构建
