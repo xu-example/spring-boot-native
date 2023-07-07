@@ -2,6 +2,7 @@
 
 - 需要 springboot3
 
+- 测试地址: http://localhost:8080/test
 
 # 参考
 

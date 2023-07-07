@@ -12,8 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-#         os: [macos-latest, windows-latest, ubuntu-latest]
-        os: [windows-latest]
+        os: [macos-latest, windows-latest, ubuntu-latest]
     steps:
       - uses: actions/checkout@v3
 
@@ -35,12 +34,6 @@ jobs:
         run: |
           mvn -Pnative native:compile
 #          mvn -Pnative package
-
-#      - name: 上传
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: spring-boot-native-example-${{ matrix.os }}
-#          path: target/spring-boot-native-example*
 
       - name: 上传到 release 中
         uses: svenstaro/upload-release-action@v2
