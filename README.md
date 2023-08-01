@@ -4,6 +4,12 @@
 
 - 测试地址: http://localhost:8080/test
 
+
+# 如何触发构建
+
+新建tag并推送可以触发
+
+
 # 参考
 
 [github graalvm  action配置](https://github.com/marketplace/actions/github-action-for-graalvm)
