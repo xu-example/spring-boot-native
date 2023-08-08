@@ -1,4 +1,4 @@
-name: GraalVM Native Image builds
+name: Native构建
 on:
   push:
     tags:
@@ -32,8 +32,8 @@ jobs:
 
       - name: 使用 Maven 构建
         run: |
-          mvn -Pnative native:compile
-#          mvn -Pnative package
+          mvn -DskipTests native:compile -P native,github
+      #          mvn -Pnative package
 
       - name: 上传到 release 中
         uses: svenstaro/upload-release-action@v2

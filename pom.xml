@@ -41,46 +41,65 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
+    <profiles>
+        <!-- local环境 -->
+        <profile>
+            <id>local</id>
+            <properties>
+                <spring.profiles.active>dev</spring.profiles.active>
+            </properties>
+            <!-- 默认激活 dev 环境 -->
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+
+        <!-- 生产环境 -->
+        <profile>
+            <id>github</id>
+            <properties>
+                <spring.profiles.active>prod</spring.profiles.active>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.graalvm.buildtools</groupId>
+                        <artifactId>native-maven-plugin</artifactId>
+                        <version>0.9.16</version>
+                        <extensions>true</extensions>
+                        <executions>
+                            <execution>
+                                <id>build-native</id>
+                                <goals>
+                                    <goal>compile-no-fork</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <mainClass>name.xu.example.Application</mainClass>
+                            <!-- 构建完成后文件的名字,位于target下面,例如                  -->
+                            <imageName>spring-boot-native-example</imageName>
+                            <buildArgs>
+                                <buildArg>--verbose</buildArg>
+                                <buildArg>--enable-url-protocols=http</buildArg>
+                                <buildArg>--enable-url-protocols=https</buildArg>
+                            </buildArgs>
+                            <skipTests>true</skipTests>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     <build>
-
         <plugins>
-            <plugin>
-                <groupId>org.graalvm.buildtools</groupId>
-                <artifactId>native-maven-plugin</artifactId>
-                <version>0.9.16</version>
-                <extensions>true</extensions>
-                <executions>
-                    <execution>
-                        <id>build-native</id>
-                        <goals>
-                            <goal>compile-no-fork</goal>
-                        </goals>
-                        <phase>package</phase>
-                    </execution>
-                    <execution>
-                        <id>test-native</id>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                        <phase>test</phase>
-                    </execution>
-                </executions>
-                <configuration>
-                    <mainClass>name.xu.example.Application</mainClass>
-                    <!-- 构建完成后文件的名字,位于target下面,例如                  -->
-                    <imageName>spring-boot-native-example</imageName>
-                    <buildArgs>
-                        <buildArg>--verbose</buildArg>
-                    </buildArgs>
-                </configuration>
-            </plugin>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <mainClass>name.xu.example.Application</mainClass>
-                    <!--                    <skip>true</skip>-->
+                    <!--                      <skip>true</skip>-->
                 </configuration>
                 <executions>
                     <execution>
